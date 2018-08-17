@@ -2,7 +2,7 @@ package ldeltoro
 
 import cats.effect.IO
 import fs2.Stream
-import ldeltoro.config.{Config, ServerConfig}
+import ldeltoro.config.{Config, DbConfig, ServerConfig}
 import ldeltoro.util.Resources
 import org.http4s.Method.GET
 import org.http4s.client.blaze.Http1Client
@@ -45,6 +45,7 @@ object FunctionalTest extends TestSuite with Resources {
   val testAppPort = findFreePort
   val testAppUri = Uri.unsafeFromString(s"http://$testAppHost:$testAppPort")
   val testConfig = new Config(
-    server = ServerConfig(testAppHost, testAppPort)
+    server = ServerConfig(testAppHost, testAppPort),
+    database = DbConfig("jdbc:postgresql:address", "addr", "addr", "org.postgresql.Driver")
   )
 }

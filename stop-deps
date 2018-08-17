@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -e
+
+(docker stop postgres-address-service && docker rm postgres-address-service) || echo "no postgres container found, ignoring"

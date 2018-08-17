@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -e
+
+#docker run --name postgres-address-service -p 5432:5432 -e POSTGRES_PASSWORD=as12345 -d postgres:11
+docker run --name postgres-address-service -p 5432:5432 -d postgres:11

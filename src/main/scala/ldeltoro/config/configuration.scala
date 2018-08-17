@@ -11,9 +11,11 @@ import pureconfig.modules.http4s._
 
 case class Config(
   server: ServerConfig,
+  database: DbConfig
 )
 
 case class ServerConfig(host : String, port : Int)
+case class DbConfig(url: String, user:String, password:String, driver: String)
 
 object Config {
   private val logger = LoggerFactory.getLogger(Config.getClass)

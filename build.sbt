@@ -28,7 +28,10 @@ val root = project
       "com.lihaoyi" %% "scalatags" % "0.6.7",
       "com.lihaoyi" %% "utest" % "0.6.3" % "test",
       "org.mockito" %% "mockito-scala" % "0.0.7" % "test",
-      "org.tpolecat" %% "doobie-core" % doobieVersion
+      "org.tpolecat" %% "doobie-core" % doobieVersion,
+      "org.tpolecat" %% "doobie-hikari" % doobieVersion,
+      "org.postgresql" % "postgresql" % "42.2.4",
+      "org.flywaydb" %  "flyway-core" % "5.1.4"
 
     )
   )

@@ -5,6 +5,7 @@ import fs2.StreamApp.ExitCode
 import fs2.{Stream, StreamApp}
 import ldeltoro.config.{Config, ServerConfig}
 import ldeltoro.controller.AddressController
+import ldeltoro.db.Database
 import org.http4s.HttpService
 import org.http4s.server.Router
 import org.http4s.server.blaze.BlazeBuilder
@@ -20,6 +21,8 @@ object App extends StreamApp[IO] {
   def bootstrap(streamConf: Stream[IO, Config]): Stream[IO, ExitCode] =
     for {
       conf                         <- streamConf
+      transactor                   <- Stream.eval(Database.transactor(conf.database))
+      _                            <- Stream.eval(Database.initialize(transactor))
       addressController            = new AddressController()
       router                       =  buildRoutes(addressController.routes())
       ServerConfig(host, port)     =  conf.server
