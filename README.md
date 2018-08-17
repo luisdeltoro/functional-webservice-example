@@ -1,6 +1,11 @@
 # Address Service
 
-This is an example Web Service using Http4s and Doobie
+This is an example Web Service making use of a pure functional stack.
+Namely:
+* Cats
+* Http4s
+* Circe
+* Doobie
 
 # Database
 
