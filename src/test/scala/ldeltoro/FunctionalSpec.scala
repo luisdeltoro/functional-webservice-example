@@ -63,6 +63,25 @@ class FunctionalSpec extends Specification with Resources with BeforeAfterAll {
         resp.status.code must_== 204
       }
 
+      "return 204 when the /public/user/{userId}/addresses/{addrId} endpoint is called with PUT and the address exists" in {
+        val addrId = createDummyAddr()
+        val addr = Address("Wall Street", Some("2"))
+        val uri = testAppUri / "public" / "user" / "123" / "addresses" / addrId
+        val req = Request[IO](PUT, uri).withBody(addr.asJson)
+        val (resp, body) = fetch(req)
+
+        resp.status.code must_== 204
+      }
+
+      "return 404 when the /public/user/{userId}/addresses/{addrId} endpoint is called with PUT and the address does not exist" in {
+        val addr = Address("Wall Street", Some("2"))
+        val uri = testAppUri / "public" / "user" / "123" / "addresses" / UUID.randomUUID().toString
+        val req = Request[IO](PUT, uri).withBody(addr.asJson)
+        val (resp, body) = fetch(req)
+
+        resp.status.code must_== 404
+      }
+
     }
 
   val testAppHost = "localhost"

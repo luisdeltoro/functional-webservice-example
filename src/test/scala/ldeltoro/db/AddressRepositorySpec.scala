@@ -16,5 +16,8 @@ class AddressRepositorySpec extends Specification with IOChecker {
   val testee = new AddressRepository(transactor)
 
   check(testee.insertStmt(UUID.randomUUID().toString, "Wall Street", Some("1"), "1234"))
+  check(testee.updateStmt(UUID.randomUUID().toString, "Wall Street", Some("1")))
+  check(testee.deleteStmt(UUID.randomUUID().toString))
+  check(testee.findStmt(UUID.randomUUID().toString))
   check(testee.findAllByUserIdStmt("123"))
 }

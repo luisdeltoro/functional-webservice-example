@@ -12,6 +12,7 @@ class AddressRepository(transactor: Transactor[IO]) {
 
   def insertStmt(bId: String, street: String, number: Option[String], userId: String) = sql"INSERT INTO address (bId, street, number, user_id) VALUES ($bId, $street, $number, $userId)".update
   def deleteStmt(bId: String) = sql"DELETE FROM address WHERE bId = $bId".update
+  def updateStmt(bId: String, street: String, number: Option[String]) = sql"UPDATE address SET street = $street, number = $number WHERE bId = $bId".update
   def findAllByUserIdStmt(userId: String) = sql"SELECT street, number FROM address WHERE user_id = $userId".query[Address]
   def findStmt(bId: String) = sql"SELECT street, number FROM address WHERE bId = $bId".query[Address]
 
@@ -22,6 +23,10 @@ class AddressRepository(transactor: Transactor[IO]) {
 
   def delete(bId: String): IO[Int] = {
     deleteStmt(bId).run.transact(transactor)
+  }
+
+  def update(address: Address, bId: String): IO[Int] = {
+    updateStmt(bId, address.street, address.number).run.transact(transactor)
   }
 
   def find(bId: String): IO[Option[Address]] = {
