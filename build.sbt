@@ -19,20 +19,18 @@ val root = project
       "io.circe" %% "circe-java8" % circeVersion,
       "org.http4s" %% "http4s-dsl" % http4sVersion,
       "org.http4s" %% "http4s-blaze-server" % http4sVersion,
-      "org.http4s" %% "http4s-server-metrics" % http4sVersion,
       "org.http4s" %% "http4s-blaze-client" % http4sVersion,
       "org.http4s" %% "http4s-circe" % http4sVersion,
       "org.log4s" %% "log4s" % "1.3.4",
-      "net.logstash.logback" % "logstash-logback-encoder" % "4.8",
       "ch.qos.logback" %  "logback-classic" % "1.1.8",
-      "com.lihaoyi" %% "scalatags" % "0.6.7",
-      "com.lihaoyi" %% "utest" % "0.6.3" % "test",
-      "org.mockito" %% "mockito-scala" % "0.0.7" % "test",
       "org.tpolecat" %% "doobie-core" % doobieVersion,
       "org.tpolecat" %% "doobie-hikari" % doobieVersion,
-      "org.postgresql" % "postgresql" % "42.2.4",
-      "org.flywaydb" %  "flyway-core" % "5.1.4"
-
+      "org.tpolecat" %% "doobie-postgres"  % doobieVersion,
+      "org.tpolecat" %% "doobie-specs2"  % doobieVersion,
+      "org.flywaydb" %  "flyway-core" % "5.1.4",
+      "org.specs2" %% "specs2-core" % specs2Version % "test",
+      "org.specs2" %% "specs2-mock" % specs2Version % "test",
+      "org.specs2" %% "specs2-matcher-extra" % specs2Version % "test"
     )
   )
   .settings(
