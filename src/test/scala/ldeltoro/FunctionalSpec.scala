@@ -1,11 +1,13 @@
 package ldeltoro
 
+import java.util.UUID
+
 import cats.effect.IO
 import fs2.Stream
 import ldeltoro.config.{Config, DbConfig, ServerConfig}
 import ldeltoro.model.Address
 import ldeltoro.util.Resources
-import org.http4s.Method.{GET, POST}
+import org.http4s.Method._
 import org.http4s.client.blaze.Http1Client
 import org.http4s.{EntityDecoder, Request, Response, Uri}
 import org.http4s.circe._
@@ -26,6 +28,23 @@ class FunctionalSpec extends Specification with Resources with BeforeAfterAll {
         resp.status.code must_== 200
       }
 
+      "return 200 when the /public/user/{userId}/addresses/{addrId} endpoint is called with GET and the address exists" in {
+        val addrId = createDummyAddr()
+        val uri = testAppUri / "public" / "user" / "123" / "addresses" / addrId
+        val req = Request[IO](GET, uri)
+        val (resp, body) = fetch(req)
+
+        resp.status.code must_== 200
+      }
+
+      "return 404 when the /public/user/{userId}/addresses/{addrId} endpoint is called with GET and the address does not exist" in {
+        val uri = testAppUri / "public" / "user" / "123" / "addresses" / "non-existent"
+        val req = Request[IO](GET, uri)
+        val (resp, body) = fetch(req)
+
+        resp.status.code must_== 404
+      }
+
       "return 201 when the /public/user/{userId}/addresses endpoint is called with POST" in {
         val addr = Address("Wall Street", Some("1"))
         val uri = testAppUri / "public" / "user" / "123" / "addresses"
@@ -34,6 +53,14 @@ class FunctionalSpec extends Specification with Resources with BeforeAfterAll {
 
         resp.status.code must_== 201
         resp.headers.get(CaseInsensitiveString("Location")).map(_.value) must beSome
+      }
+
+      "return 204 when the /public/user/{userId}/addresses/{addrId} endpoint is called with DELETE" in {
+        val uri = testAppUri / "public" / "user" / "123" / "addresses" / UUID.randomUUID().toString
+        val req = Request[IO](DELETE, uri)
+        val (resp, body) = fetch(req)
+
+        resp.status.code must_== 204
       }
 
     }
@@ -54,6 +81,14 @@ class FunctionalSpec extends Specification with Resources with BeforeAfterAll {
 
   def afterAll(): Unit = {
     client.shutdownNow()
+  }
+
+  private def createDummyAddr(): String = {
+    val addr = Address("Wall Street", Some("1"))
+    val uri = testAppUri / "public" / "user" / "123" / "addresses"
+    val req = Request[IO](POST, uri).withBody(addr.asJson)
+    val (resp, body) = fetch(req)
+    resp.headers.get(CaseInsensitiveString("Location")).map(_.value).get.split("/").last
   }
 
   private def fetch(req: Request[IO]): (Response[IO], String) = {

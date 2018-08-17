@@ -29,7 +29,12 @@ class AddressController(addressRepository: AddressRepository) {
           Created(Location(Uri.unsafeFromString(s"/user/$userId/addresses/$id")))
         }
       }
-
+    case req @ GET -> Root / "user" / userId / "addresses" / addrId =>
+      logger.debug(s"Endpoint /user/$userId/addresses/$addrId called with GET request: $req")
+      addressRepository.find(addrId).flatMap(_.fold(NotFound())(a => Ok(a.asJson)))
+    case req @ DELETE -> Root / "user" / userId / "addresses" / addrId =>
+      logger.debug(s"Endpoint /user/$userId/addresses/$addrId called with GET request: $req")
+      addressRepository.delete(addrId).flatMap(_ => NoContent())
   }
 
 }
