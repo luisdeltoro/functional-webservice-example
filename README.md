@@ -1,6 +1,6 @@
 # Address Service
 
-This is an example Web Service making use of a pure functional stack.
+This is an example Web Service built making use of a pure functional stack.
 Namely:
 * Cats
 * Http4s
